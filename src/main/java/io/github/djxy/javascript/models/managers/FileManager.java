@@ -13,6 +13,7 @@ public class FileManager extends Manager {
 
     public FileManager(Script script) {
         super(script);
+        script.addVariable("fileManager", this);
         this.path = "."+File.separator+"config"+File.separator+script.getName();
 
         new File(this.path).mkdirs();

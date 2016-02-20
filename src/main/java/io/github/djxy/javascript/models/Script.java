@@ -1,8 +1,6 @@
 package io.github.djxy.javascript.models;
 
-import io.github.djxy.javascript.models.managers.CommandManager;
-import io.github.djxy.javascript.models.managers.EventManager;
-import io.github.djxy.javascript.models.managers.FileManager;
+import io.github.djxy.javascript.models.managers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -24,6 +22,8 @@ public class Script {
     private final FileManager fileManager;
     private final CommandManager commandManager;
     private final EventManager eventManager;
+    private final ServerManager serverManager;
+    private EconomyManager economyManager;
     private final Object plugin;
     private final Game game;
     private final Logger logger;
@@ -36,16 +36,14 @@ public class Script {
         this.logger = logger;
         this.name = name;
         this.files = files;
+        this.engine = new ScriptEngineManager().getEngineByName("nashorn");
         this.fileManager = new FileManager(this);
         this.commandManager = new CommandManager(this);
         this.eventManager = new EventManager(this);
+        this.serverManager = new ServerManager(this);
 
-        engine = new ScriptEngineManager().getEngineByName("nashorn");
         engine.put("plugin", plugin);
         engine.put("game", game);
-        engine.put("fileManager", this.fileManager);
-        engine.put("commandManager", this.commandManager);
-        engine.put("eventManager", this.eventManager);
         engine.put("logger", LoggerFactory.getLogger(name));
         engine.eval("var JSON = Java.type('io.github.djxy.javascript.models.JSONParser');");
         engine.eval("var Text = Java.type('org.spongepowered.api.text.Text');");
@@ -53,6 +51,10 @@ public class Script {
 
         for(File script : files)
             engine.eval(new FileReader(script));
+    }
+
+    public void addVariable(String name, Object object){
+        engine.put(name, object);
     }
 
     public Object getPlugin() {
@@ -92,6 +94,8 @@ public class Script {
     }
 
     public void onGamePostInitializationEvent(GamePostInitializationEvent event){
+        this.economyManager = new EconomyManager(this);//Need this event for the EconomyService to be ready.
+
         try{
             Invocable invocable = (Invocable) engine;
 

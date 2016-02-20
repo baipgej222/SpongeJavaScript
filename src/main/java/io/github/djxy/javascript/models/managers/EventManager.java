@@ -11,6 +11,7 @@ public class EventManager extends Manager {
 
     public EventManager(Script script) {
         super(script);
+        script.addVariable("eventManager", this);
     }
 
     public void register(ScriptObjectMirror scriptObjectMirror){

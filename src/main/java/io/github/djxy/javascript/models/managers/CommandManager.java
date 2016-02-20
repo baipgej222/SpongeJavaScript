@@ -17,6 +17,7 @@ public class CommandManager extends Manager {
 
     public CommandManager(Script script) {
         super(script);
+        script.addVariable("commandManager", this);
     }
 
     public void register(ScriptObjectMirror scriptObjectMirror){
