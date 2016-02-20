@@ -42,7 +42,6 @@ public class Script {
         this.eventManager = new EventManager(this);
         this.serverManager = new ServerManager(this);
 
-        engine.put("plugin", plugin);
         engine.put("game", game);
         engine.put("logger", LoggerFactory.getLogger(name));
         engine.eval("var JSON = Java.type('io.github.djxy.javascript.models.JSONParser');");
