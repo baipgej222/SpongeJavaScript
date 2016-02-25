@@ -8,27 +8,38 @@ import org.spongepowered.api.service.economy.EconomyService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Samuel on 2016-02-20.
  */
-public class EconomyManager extends Manager {
+public class EconomyManager {
 
     private final EconomyService economyService;
+    private final Script script;
 
     public EconomyManager(Script script) {
-        super(script);
+        this.script = script;
 
         if(script.getGame().getServiceManager().provide(EconomyService.class).isPresent()){
             economyService = script.getGame().getServiceManager().provide(EconomyService.class).get();
-
-            put("currency", economyService.getDefaultCurrency());
-            put("currencies", new ArrayList<>(economyService.getCurrencies()));
 
             script.addVariable("economyManager", this);
         }
         else
             economyService = null;
+    }
+
+    public Currency getCurrency(){
+        return economyService.getDefaultCurrency();
+    }
+
+    public List<Currency> getCurrencies(){
+        return new ArrayList<>(economyService.getCurrencies());
+    }
+
+    public EconomyService getEconomyService() {
+        return economyService;
     }
 
     public void createAccount(Player player){

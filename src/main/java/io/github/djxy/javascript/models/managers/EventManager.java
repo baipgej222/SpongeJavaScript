@@ -7,10 +7,12 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 /**
  * Created by Samuel on 2016-02-18.
  */
-public class EventManager extends Manager {
+public class EventManager {
+
+    private final Script script;
 
     public EventManager(Script script) {
-        super(script);
+        this.script = script;
         script.addVariable("eventManager", this);
     }
 

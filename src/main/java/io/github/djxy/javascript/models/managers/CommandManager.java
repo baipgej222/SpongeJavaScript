@@ -9,44 +9,45 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Samuel on 2016-02-18.
  */
-public class CommandManager extends Manager {
+public class CommandManager {
+
+    private final Script script;
 
     public CommandManager(Script script) {
-        super(script);
+        this.script = script;
         script.addVariable("commandManager", this);
     }
 
-    public void register(ScriptObjectMirror scriptObjectMirror){
-        if(!scriptObjectMirror.isArray()){
-            String description = scriptObjectMirror.get("description") != null?(String) scriptObjectMirror.get("description"):null;
-            String extDescription = scriptObjectMirror.get("extendedDescription") != null?(String) scriptObjectMirror.get("extendedDescription"):null;
-            String permission = scriptObjectMirror.get("permission") != null?(String) scriptObjectMirror.get("permission"):null;
-            ScriptObjectMirror executor = scriptObjectMirror.get("executor") != null?(ScriptObjectMirror) scriptObjectMirror.get("executor"):null;
-            ScriptObjectMirror arguments = scriptObjectMirror.get("arguments") != null?(ScriptObjectMirror) scriptObjectMirror.get("arguments"):null;
-            Object commands[] = scriptObjectMirror.get("commands") != null?((ScriptObjectMirror) scriptObjectMirror.get("commands")).values().toArray():new Object[0];
+    public void register(Map<String,Object> map){
+        String description = map.get("description") != null?(String) map.get("description"):null;
+        String extDescription = map.get("extendedDescription") != null?(String) map.get("extendedDescription"):null;
+        String permission = map.get("permission") != null?(String) map.get("permission"):null;
+        ScriptObjectMirror executor = map.get("executor") != null?(ScriptObjectMirror) map.get("executor"):null;
+        ScriptObjectMirror arguments = map.get("arguments") != null?(ScriptObjectMirror) map.get("arguments"):null;
+        Object commands[] = map.get("commands") != null?((ScriptObjectMirror) map.get("commands")).values().toArray():new Object[0];
 
-            CommandSpec.Builder command = CommandSpec.builder();
+        CommandSpec.Builder command = CommandSpec.builder();
 
-            if(description != null)
-                command.description(Text.of(description));
-            if(extDescription != null)
-                command.extendedDescription(Text.of(extDescription));
-            if(permission != null)
-                command.permission(permission);
-            if(executor != null) {
-                CommandExecutor commandExecutor = new CommandExecutor(executor);
-                command.executor(commandExecutor);
+        if(description != null)
+            command.description(Text.of(description));
+        if(extDescription != null)
+            command.extendedDescription(Text.of(extDescription));
+        if(permission != null)
+            command.permission(permission);
+        if(executor != null) {
+            CommandExecutor commandExecutor = new CommandExecutor(executor);
+            command.executor(commandExecutor);
 
-                if (arguments != null && arguments.isArray())
-                    setGenericArguments(command, arguments, commandExecutor);
-            }
-
-            script.getGame().getCommandManager().register(script.getPlugin(), command.build(), getCommands(commands));
+            if (arguments != null && arguments.isArray())
+                setGenericArguments(command, arguments, commandExecutor);
         }
+
+        script.getGame().getCommandManager().register(script.getPlugin(), command.build(), getCommands(commands));
     }
 
     private void setGenericArguments(CommandSpec.Builder command, ScriptObjectMirror genericArguments, CommandExecutor commandExecutor){

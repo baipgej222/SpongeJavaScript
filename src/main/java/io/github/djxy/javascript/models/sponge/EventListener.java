@@ -3,7 +3,6 @@ package io.github.djxy.javascript.models.sponge;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.world.TargetWorldEvent;
@@ -23,27 +22,12 @@ public class EventListener extends SpongeImplementation implements org.spongepow
 
     @Override
     public void handle(Event event) throws Exception {
-        callFunction(createObject(event));
+        //callFunction(JavascriptObjectController.getInstance().convertToJavascript(event));
     }
 
     @Override
     protected Map<String, Object> createObject(Object... args) {
         HashMap<String,Object> map = new HashMap<>();
-        Event event = (Event) args[0];
-
-        if(event instanceof TargetWorldEvent) {
-            setMaTargetWorldEvent(map, (TargetWorldEvent) event);
-
-            if (event instanceof ChangeBlockEvent)
-                setMapChangeBlockEvent(map, (ChangeBlockEvent) event);
-        }
-
-        map.put("event", event);
-        map.put("cause", event.getCause());
-
-        if(event.getCause().first(Player.class).isPresent())
-            map.put("player", event.getCause().first(Player.class).get());
-
         return map;
     }
 

@@ -43,7 +43,7 @@ public class Sponge {
                 try {
                     String name = getScriptName(file.getName());
 
-                    this.scripts.add(new Script(this, name, game, logger, scripts));
+                    this.scripts.add(new Script(this, name, game, scripts));
                     logger.info(name + " loaded.");
                 }catch (Exception e){
                     e.printStackTrace();

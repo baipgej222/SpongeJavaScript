@@ -17,7 +17,7 @@ public abstract class SpongeImplementation {
         this.executor = executor;
     }
 
-    public void callFunction(Map<String,Object> map){
+    public void callFunction(Object map){
         executor.call(executor, map);
     }
 

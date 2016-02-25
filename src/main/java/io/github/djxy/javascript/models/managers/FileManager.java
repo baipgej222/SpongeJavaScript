@@ -7,12 +7,11 @@ import java.io.*;
 /**
  * Created by Samuel on 2016-02-18.
  */
-public class FileManager extends Manager {
+public class FileManager  {
 
     private final String path;
 
     public FileManager(Script script) {
-        super(script);
         script.addVariable("fileManager", this);
         this.path = "."+File.separator+"config"+File.separator+script.getName();
 

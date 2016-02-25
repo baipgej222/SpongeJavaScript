@@ -1,7 +1,7 @@
 package io.github.djxy.javascript.models;
 
+import io.github.djxy.javascript.models.javascript.JavascriptObject;
 import io.github.djxy.javascript.models.managers.*;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.game.state.*;
@@ -22,38 +22,36 @@ public class Script {
     private final FileManager fileManager;
     private final CommandManager commandManager;
     private final EventManager eventManager;
-    private final ServerManager serverManager;
     private EconomyManager economyManager;
     private final Object plugin;
     private final Game game;
-    private final Logger logger;
+    private final Console console;
     private final ArrayList<File> files;
     private final ScriptEngine engine;
 
-    public Script(Object plugin, String name, Game game, Logger logger, ArrayList<File> files) throws Exception {
+    public Script(Object plugin, String name, Game game, ArrayList<File> files) throws Exception {
         this.plugin = plugin;
         this.game = game;
-        this.logger = logger;
+        this.console = new Console(LoggerFactory.getLogger(name));
         this.name = name;
         this.files = files;
         this.engine = new ScriptEngineManager().getEngineByName("nashorn");
         this.fileManager = new FileManager(this);
         this.commandManager = new CommandManager(this);
         this.eventManager = new EventManager(this);
-        this.serverManager = new ServerManager(this);
 
-        engine.put("game", game);
-        engine.put("logger", LoggerFactory.getLogger(name));
+        addVariable("game", game);
+        addVariable("console", console);
         engine.eval("var JSON = Java.type('io.github.djxy.javascript.models.JSONParser');");
         engine.eval("var Text = Java.type('org.spongepowered.api.text.Text');");
-        engine.eval("function print(message){logger.info(message);}");
+        engine.eval("var Task = Java.type('org.spongepowered.api.scheduler.Task');");
 
         for(File script : files)
             engine.eval(new FileReader(script));
     }
 
     public void addVariable(String name, Object object){
-        engine.put(name, object);
+        engine.put(name, new JavascriptObject(object));
     }
 
     public Object getPlugin() {
