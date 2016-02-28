@@ -1,10 +1,9 @@
-package io.github.djxy.javascript.models.managers;
+package io.github.djxy.javascript.models.sponge;
 
 import io.github.djxy.javascript.models.Script;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.service.economy.Currency;
-import org.spongepowered.api.service.economy.EconomyService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,18 +12,18 @@ import java.util.List;
 /**
  * Created by Samuel on 2016-02-20.
  */
-public class EconomyManager {
+public class EconomyService {
 
-    private final EconomyService economyService;
+    private final org.spongepowered.api.service.economy.EconomyService economyService;
     private final Script script;
 
-    public EconomyManager(Script script) {
+    public EconomyService(Script script) {
         this.script = script;
 
-        if(script.getGame().getServiceManager().provide(EconomyService.class).isPresent()){
-            economyService = script.getGame().getServiceManager().provide(EconomyService.class).get();
+        if(script.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).isPresent()){
+            economyService = script.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).get();
 
-            script.addVariable("economyManager", this);
+            script.addVariable("economyService", this);
         }
         else
             economyService = null;
@@ -38,7 +37,7 @@ public class EconomyManager {
         return new ArrayList<>(economyService.getCurrencies());
     }
 
-    public EconomyService getEconomyService() {
+    public org.spongepowered.api.service.economy.EconomyService getEconomyService() {
         return economyService;
     }
 

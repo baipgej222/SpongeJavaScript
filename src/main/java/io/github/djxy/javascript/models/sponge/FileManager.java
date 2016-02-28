@@ -1,4 +1,4 @@
-package io.github.djxy.javascript.models.managers;
+package io.github.djxy.javascript.models.sponge;
 
 import io.github.djxy.javascript.models.Script;
 

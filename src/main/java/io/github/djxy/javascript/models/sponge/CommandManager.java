@@ -1,16 +1,21 @@
-package io.github.djxy.javascript.models.managers;
+package io.github.djxy.javascript.models.sponge;
 
 import io.github.djxy.javascript.models.Script;
-import io.github.djxy.javascript.models.sponge.CommandExecutor;
+import io.github.djxy.javascript.models.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.api.scripting.ScriptUtils;
 import jdk.nashorn.internal.runtime.ScriptObject;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -131,6 +136,28 @@ public class CommandManager {
                 comms.add((String) object);
 
         return comms;
+    }
+
+    public class CommandExecutor implements org.spongepowered.api.command.spec.CommandExecutor {
+
+        private final HashMap<String, Boolean> arguments;
+        private final ScriptObjectMirror executor;
+
+        private CommandExecutor(ScriptObjectMirror executor) {
+            this.executor = executor;
+            this.arguments = new HashMap<>();
+        }
+
+        public void addArgument(String name, boolean isOnlyOne){
+            this.arguments.put(name, isOnlyOne);
+        }
+
+        @Override
+        public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
+            executor.call(executor, new JavascriptObject(commandSource), new JavascriptObject(commandContext));
+
+            return CommandResult.success();
+        }
     }
 
 }

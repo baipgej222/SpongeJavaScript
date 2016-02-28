@@ -1,7 +1,7 @@
 package io.github.djxy.javascript.models;
 
 import io.github.djxy.javascript.models.javascript.JavascriptObject;
-import io.github.djxy.javascript.models.managers.*;
+import io.github.djxy.javascript.models.sponge.*;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.game.state.*;
@@ -22,7 +22,7 @@ public class Script {
     private final FileManager fileManager;
     private final CommandManager commandManager;
     private final EventManager eventManager;
-    private EconomyManager economyManager;
+    private EconomyService economyManager;
     private final Object plugin;
     private final Game game;
     private final Console console;
@@ -92,7 +92,7 @@ public class Script {
     }
 
     public void onGamePostInitializationEvent(GamePostInitializationEvent event){
-        this.economyManager = new EconomyManager(this);//Need this event for the EconomyService to be ready.
+        this.economyManager = new EconomyService(this);//Need this event for the EconomyService to be ready.
 
         try{
             Invocable invocable = (Invocable) engine;
