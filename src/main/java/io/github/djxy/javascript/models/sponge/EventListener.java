@@ -1,15 +1,9 @@
 package io.github.djxy.javascript.models.sponge;
 
+import io.github.djxy.javascript.models.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.data.Transaction;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Event;
-import org.spongepowered.api.event.block.ChangeBlockEvent;
-import org.spongepowered.api.event.world.TargetWorldEvent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -21,30 +15,13 @@ public class EventListener extends SpongeImplementation implements org.spongepow
     }
 
     @Override
-    public void handle(Event event) throws Exception {
-        //callFunction(JavascriptObjectController.getInstance().convertToJavascript(event));
+    public void handle(Event event) {
+        try {
+            if (!event.getCause().first(Player.class).isPresent())
+                callFunction(new JavascriptObject(event));
+            else
+                callFunction(new JavascriptObject(event), new JavascriptObject(event.getCause().first(Player.class).get()));
+        }catch(Exception e){e.printStackTrace();};
     }
 
-    @Override
-    protected Map<String, Object> createObject(Object... args) {
-        HashMap<String,Object> map = new HashMap<>();
-        return map;
-    }
-
-    private void setMaTargetWorldEvent(Map<String, Object> map, TargetWorldEvent targetWorldEvent){
-        map.put("world", targetWorldEvent.getTargetWorld());
-    }
-
-    private void setMapChangeBlockEvent(Map<String, Object> map, ChangeBlockEvent changeBlockEvent){
-        ArrayList<BlockSnapshot> blocksBefore = new ArrayList<>();
-        ArrayList<BlockSnapshot> blocksAfter = new ArrayList<>();
-
-        for(Transaction<BlockSnapshot> blockSnapshot : changeBlockEvent.getTransactions()) {
-            blocksAfter.add(blockSnapshot.getFinal());
-            blocksBefore.add(blockSnapshot.getOriginal());
-        }
-
-        map.put("blocksBefore", blocksBefore);
-        map.put("blocksAfter", blocksAfter);
-    }
 }

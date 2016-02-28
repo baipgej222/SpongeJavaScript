@@ -6,19 +6,22 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * Created by Samuel on 2016-02-24.
+ * Created by Samuel on 2016-02-27.
  */
-public class JavascriptFunctionToString implements JSObject {
+public class JavascriptFunctionValueOf implements JSObject {
 
     private final Object object;
 
-    public JavascriptFunctionToString(Object object) {
+    public JavascriptFunctionValueOf(Object object) {
         this.object = object;
     }
 
     @Override
     public Object call(Object o, Object... objects) {
-        return object.toString();
+        if(object.getClass() == int.class || object.getClass() == Integer.class || object.getClass() == double.class || object.getClass() == Double.class || object.getClass() == long.class || object.getClass() == Long.class)
+            return object;
+        else
+            return object.toString();
     }
 
     @Override
@@ -33,8 +36,8 @@ public class JavascriptFunctionToString implements JSObject {
 
     @Override
     public Object getMember(String s) {
-        if (s.equalsIgnoreCase("valueOf"))
-            return new JavascriptFunctionValueOf(object);
+        if(s.equalsIgnoreCase("toString"))
+            return new JavascriptFunctionToString(object);
 
         return null;
     }

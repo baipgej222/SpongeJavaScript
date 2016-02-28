@@ -1,14 +1,15 @@
 package io.github.djxy.javascript.models.javascript;
 
+import jdk.nashorn.api.scripting.JSObject;
+
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 
 /**
  * Created by Samuel on 2016-02-23.
  */
-public class JavascriptFunction implements jdk.nashorn.api.scripting.JSObject {
+public class JavascriptFunction implements JSObject {
 
     private final Object realObject;
     private final Methods methods;
@@ -20,8 +21,12 @@ public class JavascriptFunction implements jdk.nashorn.api.scripting.JSObject {
 
     @Override
     public Object call(Object o, Object... objects) {
+        for(int i = 0; i < objects.length; i++)
+            if(objects[i] instanceof JavascriptObject)
+                objects[i] = ((JavascriptObject) objects[i]).getRealObject();
+
         try {
-            Object result = methods.get(objects.length).invoke(realObject, objects);
+            Object result = methods.getMethod(objects).invoke(realObject, objects);
 
             if(result != null)
                 return new JavascriptObject(result);
@@ -49,20 +54,26 @@ public class JavascriptFunction implements jdk.nashorn.api.scripting.JSObject {
     @Override
     public Object getMember(String s) {
         if(s.equalsIgnoreCase("toString")) {
-            if(methods.containOnlyOneMethod()) {
-                Method method = methods.getOnlyMethod();
+            if(methods.getMethod() != null) {
+                try {
+                    return new JavascriptFunctionToString(methods.getMethod().invoke(realObject));
+                } catch (Exception e) {}
 
-                if (!method.getReturnType().equals(Void.class) && method.getParameterCount() == 0) {
-                    try {
-                        return new JavascriptFunctionToString(method.invoke(realObject));
-                    } catch (Exception e) {}
-                } else
-                    return new JavascriptFunctionToString(methods);
+                return new JavascriptFunctionToString(methods.getMethod());
             }
-            else if(methods.getMethod(0) != null)
-                return new JavascriptFunctionToString(methods.getMethod(0));
             else
                 return new JavascriptFunctionToString(methods.getMethods());
+        }
+        else if (s.equalsIgnoreCase("valueOf")){
+            if(methods.getMethod() != null) {
+                try {
+                    return new JavascriptFunctionValueOf(methods.getMethod().invoke(realObject));
+                } catch (Exception e) {}
+
+                return new JavascriptFunctionValueOf(methods.getMethod());
+            }
+            else
+                return new JavascriptFunctionValueOf(methods.getMethods());
         }
 
         return null;

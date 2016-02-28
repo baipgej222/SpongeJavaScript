@@ -3,13 +3,14 @@ package io.github.djxy.javascript.models.managers;
 import io.github.djxy.javascript.models.Script;
 import io.github.djxy.javascript.models.sponge.CommandExecutor;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import jdk.nashorn.api.scripting.ScriptUtils;
+import jdk.nashorn.internal.runtime.ScriptObject;
 import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -23,13 +24,17 @@ public class CommandManager {
         script.addVariable("commandManager", this);
     }
 
-    public void register(Map<String,Object> map){
-        String description = map.get("description") != null?(String) map.get("description"):null;
-        String extDescription = map.get("extendedDescription") != null?(String) map.get("extendedDescription"):null;
-        String permission = map.get("permission") != null?(String) map.get("permission"):null;
-        ScriptObjectMirror executor = map.get("executor") != null?(ScriptObjectMirror) map.get("executor"):null;
-        ScriptObjectMirror arguments = map.get("arguments") != null?(ScriptObjectMirror) map.get("arguments"):null;
-        Object commands[] = map.get("commands") != null?((ScriptObjectMirror) map.get("commands")).values().toArray():new Object[0];
+    public void register(ScriptObject scriptObject){
+        register(ScriptUtils.wrap(scriptObject));
+    }
+
+    public void register(ScriptObjectMirror scriptObjectMirror){
+        String description = scriptObjectMirror.get("description") != null?(String) scriptObjectMirror.get("description"):null;
+        String extDescription = scriptObjectMirror.get("extendedDescription") != null?(String) scriptObjectMirror.get("extendedDescription"):null;
+        String permission = scriptObjectMirror.get("permission") != null?(String) scriptObjectMirror.get("permission"):null;
+        ScriptObjectMirror executor = scriptObjectMirror.get("executor") != null?(ScriptObjectMirror) scriptObjectMirror.get("executor"):null;
+        ScriptObjectMirror arguments = scriptObjectMirror.get("arguments") != null?(ScriptObjectMirror) scriptObjectMirror.get("arguments"):null;
+        Object commands[] = scriptObjectMirror.get("commands") != null?((ScriptObjectMirror) scriptObjectMirror.get("commands")).values().toArray():new Object[0];
 
         CommandSpec.Builder command = CommandSpec.builder();
 
@@ -45,9 +50,9 @@ public class CommandManager {
 
             if (arguments != null && arguments.isArray())
                 setGenericArguments(command, arguments, commandExecutor);
-        }
 
-        script.getGame().getCommandManager().register(script.getPlugin(), command.build(), getCommands(commands));
+            script.getGame().getCommandManager().register(script.getPlugin(), command.build(), getCommands(commands));
+        }
     }
 
     private void setGenericArguments(CommandSpec.Builder command, ScriptObjectMirror genericArguments, CommandExecutor commandExecutor){

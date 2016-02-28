@@ -3,6 +3,8 @@ package io.github.djxy.javascript.models.managers;
 import io.github.djxy.javascript.models.Script;
 import io.github.djxy.javascript.models.sponge.EventListener;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import jdk.nashorn.api.scripting.ScriptUtils;
+import jdk.nashorn.internal.runtime.ScriptObject;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -14,6 +16,10 @@ public class EventManager {
     public EventManager(Script script) {
         this.script = script;
         script.addVariable("eventManager", this);
+    }
+
+    public void register(ScriptObject scriptObject){
+        register(ScriptUtils.wrap(scriptObject));
     }
 
     public void register(ScriptObjectMirror scriptObjectMirror){

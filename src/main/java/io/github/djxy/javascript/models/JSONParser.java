@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.Map;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -24,25 +23,17 @@ public class JSONParser {
         return null;
     }
 
-    public static String stringify(Object object){
-        if(object instanceof ScriptObjectMirror) {
-            ScriptObjectMirror som = (ScriptObjectMirror) object;
+    public static String stringify(ScriptObjectMirror object){
 
-            if(!som.isArray()) {
-                try {
-                    return new JSONObject(som).toString(4);
-                } catch (Exception e) {
-                }
-            }
-            else{
-                try {
-                    return new JSONArray(som.values()).toString(4);
-                }catch(Exception e){}
+        if(!object.isArray()) {
+            try {
+                return new JSONObject(object).toString(4);
+            } catch (Exception e) {
             }
         }
-        else if(object instanceof Map){
+        else{
             try {
-                return new JSONObject((Map)object).toString(4);
+                return new JSONArray(object.values()).toString(4);
             }catch(Exception e){}
         }
 
