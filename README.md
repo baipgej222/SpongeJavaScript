@@ -9,7 +9,7 @@ var player;
 
 player.setDisplayName("Djxy");
 ```
-But with SpongeJavaScript you have the possibility to do the same thing, but with the JavaScript syntax.
+With SpongeJavaScript you have the possibility to do the same thing, but with the JavaScript syntax.
 ```javascript
 var player;
 
