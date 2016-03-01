@@ -45,10 +45,12 @@ public class Script {
         engine.eval("var Javascript = Java.type('io.github.djxy.javascript.models.javascript.JavascriptObject');");
         engine.eval("var JSON = Java.type('io.github.djxy.javascript.models.JSONParser');");
         engine.eval("var Text = Java.type('org.spongepowered.api.text.Text');");
+        engine.eval("var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');");
         engine.eval("var Player = Java.type('org.spongepowered.api.entity.living.player.Player');");
 
         for(File script : files)
             engine.eval(new FileReader(script));
+
     }
 
     public void addVariable(String name, Object object){
