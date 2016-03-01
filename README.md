@@ -1,5 +1,5 @@
 # SpongeJavaScript v0.1
-SpongeJavaScript is a plugin that allow anyone who know JavaScript to create their own plugins.
+SpongeJavaScript is a plugin that allow anyone who know JavaScript to create their own plugins. This project is under the [MIT license](https://github.com/djxy/SpongeJavaScript/blob/master/License.md).
 
 How SpongeJavaScript works
 ---
