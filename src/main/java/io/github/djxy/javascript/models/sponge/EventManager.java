@@ -44,12 +44,10 @@ public class EventManager {
 
         @Override
         public void handle(Event event) {
-            try {
-                if (!event.getCause().first(Player.class).isPresent())
-                    executor.call(executor, new JavascriptObject(event));
-                else
-                    executor.call(executor, new JavascriptObject(event), new JavascriptObject(event.getCause().first(Player.class).get()));
-            }catch(Exception e){e.printStackTrace();};
+            if (!event.getCause().first(Player.class).isPresent())
+                executor.call(executor, new JavascriptObject(event));
+            else
+                executor.call(executor, new JavascriptObject(event), new JavascriptObject(event.getCause().first(Player.class).get()));
         }
     }
 
