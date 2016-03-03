@@ -3,8 +3,6 @@ package io.github.djxy.javascript.models.sponge;
 import io.github.djxy.javascript.models.Script;
 import io.github.djxy.javascript.models.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.api.scripting.ScriptUtils;
-import jdk.nashorn.internal.runtime.ScriptObject;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -28,10 +26,6 @@ public class CommandManager {
         this.script = script;
         script.addVariable("commandManager", this);
     }
-
-    /*public void register(ScriptObject scriptObject){
-        register(ScriptUtils.wrap(scriptObject));
-    }*/
 
     public void register(ScriptObjectMirror scriptObjectMirror){
         String description = scriptObjectMirror.get("description") != null?(String) scriptObjectMirror.get("description"):null;
