@@ -49,7 +49,7 @@ public class Script {
         engine.eval("var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');");
         engine.eval("var Player = Java.type('org.spongepowered.api.entity.living.player.Player');");
         engine.eval("function setInterval(callback, interval){return Scheduler.getInstance().setInterval(callback, interval);}");
-        engine.eval("function setTimeout(callback, delay){return Scheduler.getInstance().setTimeout(callback, interval);}");
+        engine.eval("function setTimeout(callback, delay){return Scheduler.getInstance().setTimeout(callback, delay);}");
         engine.eval("function clearInterval(intervalId){Scheduler.getInstance().clearInterval(intervalId);}");
         engine.eval("function clearTimeout(timeoutId){Scheduler.getInstance().clearTimeout(timeoutId);}");
 
