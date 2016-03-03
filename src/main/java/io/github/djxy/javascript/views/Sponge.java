@@ -2,6 +2,7 @@ package io.github.djxy.javascript.views;
 
 import com.google.inject.Inject;
 import io.github.djxy.javascript.models.Script;
+import io.github.djxy.javascript.models.sponge.Scheduler;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Listener;
@@ -27,6 +28,8 @@ public class Sponge {
 
     @Listener
     public void onGameConstructionEvent(GameConstructionEvent event){
+        Scheduler.createScheduler(this, org.spongepowered.api.Sponge.getScheduler());
+
         File folder = new File("."+File.separator+"mods"+File.separator+"javascript");
         folder.mkdirs();
 
