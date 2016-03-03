@@ -1,6 +1,8 @@
 package io.github.djxy.javascript.models.javascript;
 
 import jdk.nashorn.api.scripting.JSObject;
+import jdk.nashorn.api.scripting.ScriptUtils;
+import jdk.nashorn.internal.runtime.ScriptObject;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -102,9 +104,10 @@ public class JavascriptObject implements JSObject {
 
     @Override
     public void setMember(String s, Object o) {
-        o = o instanceof JavascriptObject?((JavascriptObject) o).realObject:o;
         Methods set = mapSet.get(s);
         Methods setVoid = mapSetVoid.get(s);
+        o = o instanceof JavascriptObject?((JavascriptObject) o).realObject:o;
+        o = o instanceof ScriptObject? ScriptUtils.wrap((ScriptObject) o):o;
 
         if(set != null || setVoid != null){
             Method method = set == null?setVoid.getMethod(o):set.getMethod(o);

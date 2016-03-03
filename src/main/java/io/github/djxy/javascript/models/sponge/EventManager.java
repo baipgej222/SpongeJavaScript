@@ -20,9 +20,9 @@ public class EventManager {
         script.addVariable("eventManager", this);
     }
 
-    public void register(ScriptObject scriptObject){
+    /*public void register(ScriptObject scriptObject){
         register(ScriptUtils.wrap(scriptObject));
-    }
+    }*/
 
     public void register(ScriptObjectMirror scriptObjectMirror){
         if(!scriptObjectMirror.isArray()){

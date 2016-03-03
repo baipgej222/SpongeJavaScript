@@ -29,9 +29,9 @@ public class CommandManager {
         script.addVariable("commandManager", this);
     }
 
-    public void register(ScriptObject scriptObject){
+    /*public void register(ScriptObject scriptObject){
         register(ScriptUtils.wrap(scriptObject));
-    }
+    }*/
 
     public void register(ScriptObjectMirror scriptObjectMirror){
         String description = scriptObjectMirror.get("description") != null?(String) scriptObjectMirror.get("description"):null;

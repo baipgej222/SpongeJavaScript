@@ -1,6 +1,8 @@
 package io.github.djxy.javascript.models.javascript;
 
 import jdk.nashorn.api.scripting.JSObject;
+import jdk.nashorn.api.scripting.ScriptUtils;
+import jdk.nashorn.internal.runtime.ScriptObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -21,9 +23,14 @@ public class JavascriptFunction implements JSObject {
 
     @Override
     public Object call(Object o, Object... objects) {
-        for(int i = 0; i < objects.length; i++)
-            if(objects[i] instanceof JavascriptObject)
+        for(int i = 0; i < objects.length; i++) {
+            if (objects[i] instanceof JavascriptObject) {
                 objects[i] = ((JavascriptObject) objects[i]).getRealObject();
+            }
+            else if(objects[i] instanceof ScriptObject){
+                objects[i] = ScriptUtils.wrap((ScriptObject) objects[i]);
+            }
+        }
 
         try {
             Object result = methods.getMethod(objects).invoke(realObject, objects);
