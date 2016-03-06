@@ -59,7 +59,7 @@ public class Script {
     }
 
     public void addVariable(String name, Object object){
-        engine.put(name, new JavascriptObject(object));
+        engine.put(name, JavascriptObject.convertObjectToJSObject(object));
     }
 
     public Object getPlugin() {
@@ -78,7 +78,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameConstructionEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameConstructionEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -86,7 +86,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGamePreInitializationEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGamePreInitializationEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -94,7 +94,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameInitializationEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameInitializationEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -104,7 +104,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGamePostInitializationEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGamePostInitializationEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -112,7 +112,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameLoadCompleteEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameLoadCompleteEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -120,7 +120,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameAboutToStartServerEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameAboutToStartServerEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -128,7 +128,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameStartingServerEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameStartingServerEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -136,7 +136,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameStartedServerEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameStartedServerEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -144,7 +144,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameStoppingServerEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameStoppingServerEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 
@@ -152,7 +152,7 @@ public class Script {
         try{
             Invocable invocable = (Invocable) engine;
 
-            invocable.invokeFunction("onGameStoppedServerEvent", new JavascriptObject(event));
+            invocable.invokeFunction("onGameStoppedServerEvent", JavascriptObject.convertObjectToJSObject(event));
         }catch (Exception e){}
     }
 

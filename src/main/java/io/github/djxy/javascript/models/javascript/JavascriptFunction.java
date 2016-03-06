@@ -36,7 +36,7 @@ public class JavascriptFunction implements JSObject {
             Object result = methods.getMethod(objects).invoke(realObject, objects);
 
             if(result != null)
-                return new JavascriptObject(result);
+                return JavascriptObject.convertObjectToJSObject(result);
 
             return null;
         } catch (IllegalAccessException e) {

@@ -39,9 +39,9 @@ public class EventManager {
         @Override
         public void handle(Event event) {
             if (!event.getCause().first(Player.class).isPresent())
-                executor.call(executor, new JavascriptObject(event));
+                executor.call(executor, JavascriptObject.convertObjectToJSObject(event));
             else
-                executor.call(executor, new JavascriptObject(event), new JavascriptObject(event.getCause().first(Player.class).get()));
+                executor.call(executor, JavascriptObject.convertObjectToJSObject(event), JavascriptObject.convertObjectToJSObject(event.getCause().first(Player.class).get()));
         }
     }
 

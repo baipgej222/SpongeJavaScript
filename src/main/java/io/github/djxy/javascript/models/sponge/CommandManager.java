@@ -148,7 +148,7 @@ public class CommandManager {
 
         @Override
         public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
-            executor.call(executor, new JavascriptObject(commandSource), new JavascriptObject(commandContext));
+            executor.call(executor, JavascriptObject.convertObjectToJSObject(commandSource), JavascriptObject.convertObjectToJSObject(commandContext));
 
             return CommandResult.success();
         }

@@ -9,24 +9,30 @@ import java.beans.Introspector;
 import java.beans.MethodDescriptor;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Samuel on 2016-02-23.
  */
 public class JavascriptObject implements JSObject {
 
+    private static final HashMap<String, ConcurrentHashMap<Object, JavascriptObject>> objects = new HashMap<>();
+
+    static {
+        objects.put("net.minecraft.entity.player.EntityPlayerMP", new ConcurrentHashMap(32));
+        objects.put("net.minecraft.world.WorldServer", new ConcurrentHashMap(3));
+    }
+
     private final Object realObject;
     private final boolean isArray;
     private final HashMap<String,Methods> mapGet;
     private final HashMap<String,Methods> mapSet;
-    private final HashMap<String,Methods> mapSetVoid;
 
-    public JavascriptObject(Object realObject) {
+    private JavascriptObject(Object realObject) {
         this.realObject = realObject instanceof Object[]?(new ArrayList<>(Arrays.asList((Object[]) realObject))):realObject;
         this.isArray = realObject instanceof List || realObject instanceof Object[];
         this.mapGet = new HashMap<>();
         this.mapSet = new HashMap<>();
-        this.mapSetVoid = new HashMap<>();
 
         try {
             introspect(realObject, this);
@@ -34,7 +40,27 @@ public class JavascriptObject implements JSObject {
     }
 
     public static JavascriptObject convertObjectToJSObject(Object object){
-        return object instanceof JavascriptObject? (JavascriptObject) object :new JavascriptObject(object);
+        if(!(object instanceof JavascriptObject)) {
+            ConcurrentHashMap<Object, JavascriptObject> map = objects.get(object.getClass().getName());
+            JavascriptObject javascriptObject;
+
+            if (map != null) {
+                if ((javascriptObject = map.get(object)) != null) {
+                    System.out.println("Get: "+javascriptObject);
+                    return javascriptObject;
+                }
+                else{
+                    JavascriptObject js = new JavascriptObject(object);
+                    System.out.println("Create: "+js);
+                    map.put(object, js);
+                    return js;
+                }
+            }
+
+            return new JavascriptObject(object);
+        }
+        else
+            return (JavascriptObject) object;
     }
 
     public static Object convertJSObjectToObject(Object object){
@@ -68,11 +94,9 @@ public class JavascriptObject implements JSObject {
             else if (s.equalsIgnoreCase("valueOf"))
                 return new JavascriptFunctionValueOf(realObject);
             else if (mapGet.containsKey(s))
-                return new JavascriptObject(mapGet.get(s).getMethod().invoke(realObject));
+                return convertObjectToJSObject(mapGet.get(s).getMethod().invoke(realObject));
             else if (mapSet.containsKey(s))
                 return new JavascriptFunction(realObject, mapSet.get(s));
-            else if (mapSetVoid.containsKey(s))
-                return new JavascriptFunction(realObject, mapSetVoid.get(s));
         }catch (Exception e){e.printStackTrace();}
 
         return null;
@@ -84,14 +108,14 @@ public class JavascriptObject implements JSObject {
             Object o = ((List) realObject).get(i);
 
             if(o != null)
-                return new JavascriptObject(o);
+                return convertObjectToJSObject(o);
         }
         return null;
     }
 
     @Override
     public boolean hasMember(String s) {
-        return !isArray? mapGet.containsKey(s) || mapSet.containsKey(s) || mapSetVoid.containsKey(s):false;
+        return !isArray? mapGet.containsKey(s) || mapSet.containsKey(s):false;
     }
 
     @Override
@@ -105,12 +129,11 @@ public class JavascriptObject implements JSObject {
     @Override
     public void setMember(String s, Object o) {
         Methods set = mapSet.get(s);
-        Methods setVoid = mapSetVoid.get(s);
         o = o instanceof JavascriptObject?((JavascriptObject) o).realObject:o;
         o = o instanceof ScriptObject? ScriptUtils.wrap((ScriptObject) o):o;
 
-        if(set != null || setVoid != null){
-            Method method = set == null?setVoid.getMethod(o):set.getMethod(o);
+        if(set != null){
+            Method method = set.getMethod(o);
 
             if(method != null) {
                 try {
@@ -130,11 +153,10 @@ public class JavascriptObject implements JSObject {
 
     @Override
     public Set<String> keySet() {
-        Set<String> set = new HashSet<>(mapGet.size()+ mapSet.size()+ mapSetVoid.size());
+        Set<String> set = new HashSet<>(mapGet.size()+ mapSet.size());
 
         set.addAll(mapGet.keySet());
         set.addAll(mapSet.keySet());
-        set.addAll(mapSetVoid.keySet());
 
         return set;
     }
@@ -197,20 +219,6 @@ public class JavascriptObject implements JSObject {
         methods.add(method);
     }
 
-    private void addSetVoidMethod(Method method){
-        String name = convertName(method.getName());
-        Methods methodsShortName = mapSetVoid.get(name);
-        Methods methods = mapSetVoid.get(name);
-
-        if(methodsShortName == null)
-            mapSetVoid.put(name, (methodsShortName = new Methods(name)));
-        if(methods == null)
-            mapSetVoid.put(method.getName(), (methods = new Methods(method.getName())));
-
-        methodsShortName.add(method);
-        methods.add(method);
-    }
-
     private void addGetMethod(Method method){
         String name = convertName(method.getName());
         Methods methodsShortName = mapGet.get(name);
@@ -245,9 +253,7 @@ public class JavascriptObject implements JSObject {
                 if (!md.getName().startsWith("func_")) {
                     Method method = md.getMethod();
 
-                    if (method.getReturnType() == Void.TYPE)
-                        jsObj.addSetVoidMethod(method);
-                    else if (method.getGenericParameterTypes().length == 0)
+                    if (method.getGenericParameterTypes().length == 0 && method.getReturnType() != Void.TYPE)
                         jsObj.addGetMethod(method);
                     else
                         jsObj.addSetMethod(method);
@@ -262,9 +268,7 @@ public class JavascriptObject implements JSObject {
                     if (!md.getName().startsWith("func_")) {
                         Method method = md.getMethod();
 
-                        if (method.getReturnType() == Void.TYPE)
-                            jsObj.addSetVoidMethod(method);
-                        else if (method.getGenericParameterTypes().length == 0)
+                        if (method.getGenericParameterTypes().length == 0 && method.getReturnType() != Void.TYPE)
                             jsObj.addGetMethod(method);
                         else
                             jsObj.addSetMethod(method);
