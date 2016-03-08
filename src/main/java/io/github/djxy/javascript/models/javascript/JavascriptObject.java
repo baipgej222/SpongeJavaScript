@@ -46,12 +46,10 @@ public class JavascriptObject implements JSObject {
 
             if (map != null) {
                 if ((javascriptObject = map.get(object)) != null) {
-                    System.out.println("Get: "+javascriptObject);
                     return javascriptObject;
                 }
                 else{
                     JavascriptObject js = new JavascriptObject(object);
-                    System.out.println("Create: "+js);
                     map.put(object, js);
                     return js;
                 }
