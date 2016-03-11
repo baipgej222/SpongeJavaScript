@@ -1,7 +1,7 @@
-package io.github.djxy.javascript.models.sponge;
+package io.github.djxy.spongejavascript.sponge;
 
-import io.github.djxy.javascript.models.Script;
-import io.github.djxy.javascript.models.javascript.JavascriptObject;
+import io.github.djxy.spongejavascript.Script;
+import io.github.djxy.spongejavascript.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;

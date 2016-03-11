@@ -1,9 +1,8 @@
-package io.github.djxy.javascript.models.sponge;
+package io.github.djxy.spongejavascript.sponge;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.spongepowered.api.scheduler.Task;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;

@@ -1,8 +1,9 @@
-package io.github.djxy.javascript.models.sponge;
+package io.github.djxy.spongejavascript.sponge;
 
-import io.github.djxy.javascript.models.Script;
+import io.github.djxy.spongejavascript.Script;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.service.economy.Currency;
 
 import java.math.BigDecimal;
@@ -42,11 +43,11 @@ public class EconomyService {
     }
 
     public void createAccount(Player player){
-        economyService.createAccount(player.getUniqueId());
+        economyService.getOrCreateAccount(player.getUniqueId());
     }
 
     public void createAccount(String name){
-        economyService.createVirtualAccount(name);
+        economyService.getOrCreateAccount(name);
     }
 
     public Double getBalance(Player player){
@@ -66,25 +67,25 @@ public class EconomyService {
     }
 
     public Double getBalance(Player player, Currency currency){
-        if(economyService.getAccount(player.getUniqueId()).isPresent())
-            return economyService.getAccount(player.getUniqueId()).get().getBalance(currency).doubleValue();
+        if(economyService.getOrCreateAccount(player.getUniqueId()).isPresent())
+            return economyService.getOrCreateAccount(player.getUniqueId()).get().getBalance(currency).doubleValue();
 
         return null;
     }
 
     public void addMoney(Player player, Currency currency, double amount){
-        if(economyService.getAccount(player.getUniqueId()).isPresent())
-            economyService.getAccount(player.getUniqueId()).get().deposit(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(player.getUniqueId()).isPresent())
+            economyService.getOrCreateAccount(player.getUniqueId()).get().deposit(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
     public void setMoney(Player player, Currency currency, double amount){
-        if(economyService.getAccount(player.getUniqueId()).isPresent())
-            economyService.getAccount(player.getUniqueId()).get().setBalance(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(player.getUniqueId()).isPresent())
+            economyService.getOrCreateAccount(player.getUniqueId()).get().setBalance(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
     public void removeMoney(Player player, Currency currency, double amount){
-        if(economyService.getAccount(player.getUniqueId()).isPresent())
-            economyService.getAccount(player.getUniqueId()).get().withdraw(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(player.getUniqueId()).isPresent())
+            economyService.getOrCreateAccount(player.getUniqueId()).get().withdraw(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
     public Double getBalance(String name){
@@ -104,25 +105,25 @@ public class EconomyService {
     }
 
     public Double getBalance(String name, Currency currency){
-        if(economyService.getAccount(name).isPresent())
-            return economyService.getAccount(name).get().getBalance(currency).doubleValue();
+        if(economyService.getOrCreateAccount(name).isPresent())
+            return economyService.getOrCreateAccount(name).get().getBalance(currency).doubleValue();
 
         return null;
     }
 
     public void addMoney(String name, Currency currency, double amount){
-        if(economyService.getAccount(name).isPresent())
-            economyService.getAccount(name).get().deposit(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(name).isPresent())
+            economyService.getOrCreateAccount(name).get().deposit(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
     public void setMoney(String name, Currency currency, double amount){
-        if(economyService.getAccount(name).isPresent())
-            economyService.getAccount(name).get().setBalance(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(name).isPresent())
+            economyService.getOrCreateAccount(name).get().setBalance(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
     public void removeMoney(String name, Currency currency, double amount){
-        if(economyService.getAccount(name).isPresent())
-            economyService.getAccount(name).get().withdraw(currency, new BigDecimal(amount), Cause.of(script));
+        if(economyService.getOrCreateAccount(name).isPresent())
+            economyService.getOrCreateAccount(name).get().withdraw(currency, new BigDecimal(amount), Cause.of(NamedCause.source(script)));
     }
 
 }

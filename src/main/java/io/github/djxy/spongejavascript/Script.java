@@ -1,7 +1,7 @@
-package io.github.djxy.javascript.models;
+package io.github.djxy.spongejavascript;
 
-import io.github.djxy.javascript.models.javascript.JavascriptObject;
-import io.github.djxy.javascript.models.sponge.*;
+import io.github.djxy.spongejavascript.javascript.JavascriptObject;
+import io.github.djxy.spongejavascript.sponge.*;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.game.state.*;
@@ -42,9 +42,9 @@ public class Script {
 
         addVariable("game", game);
         addVariable("console", console);
-        engine.eval("var Javascript = Java.type('io.github.djxy.javascript.models.javascript.JavascriptObject');");
-        engine.eval("var Scheduler = Java.type('io.github.djxy.javascript.models.sponge.Scheduler');");
-        engine.eval("var JSON = Java.type('io.github.djxy.javascript.models.JSONParser');");
+        engine.eval("var Javascript = Java.type('io.github.djxy.spongejavascript.javascript.JavascriptObject');");
+        engine.eval("var Scheduler = Java.type('io.github.djxy.spongejavascript.sponge.Scheduler');");
+        engine.eval("var JSON = Java.type('io.github.djxy.spongejavascript.JSONParser');");
         engine.eval("var Text = Java.type('org.spongepowered.api.text.Text');");
         engine.eval("var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');");
         engine.eval("var Player = Java.type('org.spongepowered.api.entity.living.player.Player');");

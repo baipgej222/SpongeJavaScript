@@ -1,6 +1,6 @@
-package io.github.djxy.javascript.models.sponge;
+package io.github.djxy.spongejavascript.sponge;
 
-import io.github.djxy.javascript.models.Script;
+import io.github.djxy.spongejavascript.Script;
 
 import java.io.*;
 

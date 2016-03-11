@@ -1,8 +1,8 @@
-package io.github.djxy.javascript.views;
+package io.github.djxy.spongejavascript;
 
 import com.google.inject.Inject;
-import io.github.djxy.javascript.models.Script;
-import io.github.djxy.javascript.models.sponge.Scheduler;
+import io.github.djxy.spongejavascript.Script;
+import io.github.djxy.spongejavascript.sponge.Scheduler;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Listener;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 /**
  * Created by Samuel on 2016-02-07.
  */
-@Plugin(id = "SpongeJavaScript", name = "Sponge JavaScript", version = "1.0")
-public class Sponge {
+@Plugin(id = "sponge_javascript", name = "Sponge JavaScript", version = "1.0")
+public class Main {
 
     @Inject
     private Game game;
@@ -30,7 +30,7 @@ public class Sponge {
     public void onGameConstructionEvent(GameConstructionEvent event){
         Scheduler.createScheduler(this, org.spongepowered.api.Sponge.getScheduler());
 
-        File folder = new File("."+File.separator+"mods"+File.separator+"javascript");
+        File folder = new File("."+File.separator+"mods"+File.separator+"spongejavascript");
         folder.mkdirs();
 
         for(File file : folder.listFiles()) {

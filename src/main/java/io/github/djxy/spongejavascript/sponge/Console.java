@@ -1,4 +1,4 @@
-package io.github.djxy.javascript.models.sponge;
+package io.github.djxy.spongejavascript.sponge;
 
 /**
  * Created by Samuel on 2016-02-21.

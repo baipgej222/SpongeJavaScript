@@ -1,4 +1,4 @@
-package io.github.djxy.javascript.models;
+package io.github.djxy.spongejavascript;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.json.JSONArray;

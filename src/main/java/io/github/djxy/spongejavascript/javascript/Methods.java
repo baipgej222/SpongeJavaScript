@@ -1,4 +1,4 @@
-package io.github.djxy.javascript.models.javascript;
+package io.github.djxy.spongejavascript.javascript;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

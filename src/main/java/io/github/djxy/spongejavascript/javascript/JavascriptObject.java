@@ -1,4 +1,4 @@
-package io.github.djxy.javascript.models.javascript;
+package io.github.djxy.spongejavascript.javascript;
 
 import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.ScriptUtils;
