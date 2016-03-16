@@ -12,7 +12,7 @@ package io.github.djxy.spongejavascript.script;
 
 import io.github.djxy.spongejavascript.javascript.JavascriptObject;
 import io.github.djxy.spongejavascript.script.exceptions.CodeException;
-import io.github.djxy.spongejavascript.script.sponge.*;
+import io.github.djxy.spongejavascript.script.util.*;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.game.state.*;
@@ -28,54 +28,33 @@ import java.util.ArrayList;
 /**
  * Created by Samuel on 2016-02-17.
  */
-public class Script {
+public final class Script {
 
     private final String name;
-    private final FileManager fileManager;
-    private final CommandManager commandManager;
-    private final EventManager eventManager;
-    private EconomyService economyManager;
     private final Object plugin;
-    private final Console console;
-    private final Scheduler scheduler;
     private final ArrayList<File> files;
     private final ScriptEngine engine;
 
-    protected Script(Object plugin, String name, ArrayList<File> files) {
+    public Script(Object plugin, String name, ArrayList<File> files) {
         this.plugin = plugin;
-        this.console = new Console(LoggerFactory.getLogger(name));
         this.name = name;
         this.files = files;
         this.engine = new ScriptEngineManager().getEngineByName("nashorn");
-        this.fileManager = new FileManager(this);
-        this.commandManager = new CommandManager(this);
-        this.eventManager = new EventManager(this);
-        this.scheduler = new Scheduler(plugin);
-
-        addVariable("game", Sponge.getGame());
-        addVariable("console", console);
-        addVariable("scheduler", scheduler);
 
         try {
-            engine.eval("var Javascript = Java.type('io.github.djxy.spongejavascript.javascript.JavascriptObject');");
-            engine.eval("var JSON = Java.type('io.github.djxy.spongejavascript.script.util.JSONParser');");
-            engine.eval("var Text = Java.type('org.spongepowered.api.text.Text');");
-            engine.eval("var TextSerializers = Java.type('org.spongepowered.api.text.serializer.TextSerializers');");
-            engine.eval("var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');");
-            engine.eval("var Player = Java.type('org.spongepowered.api.entity.living.player.Player');");
-            engine.eval("function setInterval(callback, interval){return scheduler.setInterval(callback, interval);}");
-            engine.eval("function setTimeout(callback, delay){return scheduler.setTimeout(callback, delay);}");
-            engine.eval("function clearInterval(intervalId){Scheduler.getInstance().clearInterval(intervalId);}");
-            engine.eval("function clearTimeout(timeoutId){Scheduler.getInstance().clearTimeout(timeoutId);}");
-            engine.eval("function convertToJSObject(object){return Javascript.convertObjectToJSObject(object);}");
-            engine.eval("function convertToObject(object){return Javascript.convertJSObjectToObject(object);}");
-            engine.eval("function stringToText(text){return TextSerializers.FORMATTING_CODE.deserialize(text);}");
-
             for(File script : files)
                 engine.eval(new FileReader(script));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Object getPlugin() {
+        return plugin;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addVariable(String name, Object object){
@@ -88,14 +67,6 @@ public class Script {
         } catch (ScriptException e) {
             throw new CodeException(code);
         }
-    }
-
-    public Object getPlugin() {
-        return plugin;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Object invoke(String function, Object... args){
@@ -124,7 +95,6 @@ public class Script {
     }
 
     public void onGamePostInitializationEvent(GamePostInitializationEvent event){
-        this.economyManager = new EconomyService(this);//Need this event for the EconomyService to be ready.
         invoke("onGamePostInitializationEvent", event);
     }
 

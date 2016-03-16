@@ -8,7 +8,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.script.sponge;
+package io.github.djxy.spongejavascript.script.util;
 
 import io.github.djxy.spongejavascript.script.Script;
 import io.github.djxy.spongejavascript.javascript.JavascriptObject;
@@ -31,11 +31,10 @@ import java.util.HashMap;
  */
 public class CommandManager {
 
-    private final Script script;
+    private final Object plugin;
 
-    public CommandManager(Script script) {
-        this.script = script;
-        script.addVariable("commandManager", this);
+    public CommandManager(Object plugin) {
+        this.plugin = plugin;
     }
 
     public void register(ScriptObjectMirror scriptObjectMirror){
@@ -61,7 +60,7 @@ public class CommandManager {
             if (arguments != null && arguments.isArray())
                 setGenericArguments(command, arguments, commandExecutor);
 
-            Sponge.getGame().getCommandManager().register(script.getPlugin(), command.build(), getCommands(commands));
+            Sponge.getGame().getCommandManager().register(plugin, command.build(), getCommands(commands));
         }
     }
 
