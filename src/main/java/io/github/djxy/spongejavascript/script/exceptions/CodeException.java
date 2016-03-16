@@ -8,20 +8,15 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.sponge;
+package io.github.djxy.spongejavascript.script.exceptions;
 
 /**
- * Created by Samuel on 2016-02-21.
+ * Created by Samuel on 2016-03-14.
  */
-public class Console {
+public class CodeException extends RuntimeException {
 
-    private final org.slf4j.Logger logger;
-
-    public Console(org.slf4j.Logger logger) {
-        this.logger = logger;
+    public CodeException(String content){
+        super("This code contain an error: "+content);
     }
 
-    public void log(Object object){
-        logger.info(object.toString());
-    }
 }

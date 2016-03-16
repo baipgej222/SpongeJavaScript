@@ -8,15 +8,31 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.script.exceptions;
+package io.github.djxy.spongejavascript.script.util;
+
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 /**
- * Created by Samuel on 2016-03-14.
+ * Created by Samuel on 2016-02-18.
  */
-public class ContentException extends RuntimeException {
+public class JSONParser {
 
-    public ContentException(String content){
-        super("This content contain an error: "+content);
+    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+
+    public static Object parse(String json) throws Exception {
+        return scriptEngine.eval("Java.asJSONCompatible("+json+")");
+    }
+
+    public static String stringify(ScriptObjectMirror object){
+        if(!object.isArray())
+            return new JSONObject(object).toString(4);
+        else
+            return new JSONArray(object.values()).toString(4);
     }
 
 }

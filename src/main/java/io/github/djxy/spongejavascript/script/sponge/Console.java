@@ -8,31 +8,20 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript;
-
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+package io.github.djxy.spongejavascript.script.sponge;
 
 /**
- * Created by Samuel on 2016-02-18.
+ * Created by Samuel on 2016-02-21.
  */
-public class JSONParser {
+public class Console {
 
-    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+    private final org.slf4j.Logger logger;
 
-    public static Object parse(String json) throws Exception {
-        return scriptEngine.eval("Java.asJSONCompatible("+json+")");
+    public Console(org.slf4j.Logger logger) {
+        this.logger = logger;
     }
 
-    public static String stringify(ScriptObjectMirror object){
-        if(!object.isArray())
-            return new JSONObject(object).toString(4);
-        else
-            return new JSONArray(object.values()).toString(4);
+    public void log(Object object){
+        logger.info(object.toString());
     }
-
 }

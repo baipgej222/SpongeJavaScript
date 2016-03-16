@@ -8,9 +8,10 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.sponge;
+package io.github.djxy.spongejavascript.script.sponge;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
 
 import java.util.UUID;
@@ -22,26 +23,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Scheduler {
 
-    private static Scheduler instance;
-
-    public synchronized static Scheduler createScheduler(Object plugin, org.spongepowered.api.scheduler.Scheduler scheduler){
-        if(instance == null)
-            instance = new Scheduler(plugin, scheduler);
-
-        return instance;
-    }
-
-    public static Scheduler getInstance(){
-        return instance;
-    }
-
     private final Object plugin;
     private final org.spongepowered.api.scheduler.Scheduler scheduler;
     private final ConcurrentHashMap<UUID, Task> tasks;
 
-    public Scheduler(Object plugin, org.spongepowered.api.scheduler.Scheduler scheduler) {
+    public Scheduler(Object plugin) {
         this.plugin = plugin;
-        this.scheduler = scheduler;
+        this.scheduler = Sponge.getScheduler();
         this.tasks = new ConcurrentHashMap<>();
     }
 

@@ -8,9 +8,10 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.sponge;
+package io.github.djxy.spongejavascript.script.sponge;
 
-import io.github.djxy.spongejavascript.Script;
+import io.github.djxy.spongejavascript.script.Script;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -31,8 +32,8 @@ public class EconomyService {
     public EconomyService(Script script) {
         this.script = script;
 
-        if(script.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).isPresent()){
-            economyService = script.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).get();
+        if(Sponge.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).isPresent()){
+            economyService = Sponge.getGame().getServiceManager().provide(org.spongepowered.api.service.economy.EconomyService.class).get();
 
             script.addVariable("economyService", this);
         }

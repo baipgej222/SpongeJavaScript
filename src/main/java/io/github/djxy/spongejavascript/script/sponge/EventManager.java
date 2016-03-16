@@ -8,11 +8,12 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.djxy.spongejavascript.sponge;
+package io.github.djxy.spongejavascript.script.sponge;
 
-import io.github.djxy.spongejavascript.Script;
+import io.github.djxy.spongejavascript.script.Script;
 import io.github.djxy.spongejavascript.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Event;
 
@@ -34,7 +35,7 @@ public class EventManager {
             Class clazz = scriptObjectMirror.get("event") != null?(Class) scriptObjectMirror.get("event"):null;
 
             if(listener != null && clazz != null)
-                script.getGame().getEventManager().registerListener(script.getPlugin(), clazz, new EventListener(listener));
+                Sponge.getGame().getEventManager().registerListener(script.getPlugin(), clazz, new EventListener(listener));
         }
     }
 
