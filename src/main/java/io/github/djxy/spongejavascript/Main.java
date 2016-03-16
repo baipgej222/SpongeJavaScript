@@ -10,10 +10,9 @@
 
 package io.github.djxy.spongejavascript;
 
-import com.google.inject.Inject;
-import io.github.djxy.spongejavascript.sponge.Scheduler;
+import io.github.djxy.spongejavascript.script.ScriptManager;
 import org.slf4j.Logger;
-import org.spongepowered.api.Game;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.plugin.Plugin;
@@ -24,101 +23,92 @@ import java.util.ArrayList;
 /**
  * Created by Samuel on 2016-02-07.
  */
-@Plugin(id = "sponge_javascript", name = "Sponge JavaScript", version = "1.0")
+@Plugin(id = "spongejavascript", name = "Sponge JavaScript", version = "1.0")
 public class Main {
 
-    @Inject
-    private Game game;
+    private Logger logger = LoggerFactory.getLogger("SpongeJavaScript");
 
-    @Inject
-    private Logger logger;
-
-    private final ArrayList<Script> scripts = new ArrayList<>();
+    private ScriptManager scriptManager;
+    private File scriptFolder;
 
     @Listener
     public void onGameConstructionEvent(GameConstructionEvent event){
-        Scheduler.createScheduler(this, org.spongepowered.api.Sponge.getScheduler());
+        scriptManager = new ScriptManager();
 
-        File folder = new File("."+File.separator+"mods"+File.separator+"spongejavascript");
-        folder.mkdirs();
+        initScriptFolder();
+        loadScripts();
 
-        for(File file : folder.listFiles()) {
-            if(file.isDirectory()) {
-                ArrayList<File> scripts = new ArrayList<>();
-
-                for(File script : file.listFiles()) {
-                    if (script.getName().endsWith(".js")) {
-                        scripts.add(script);
-                    }
-                }
-
-                try {
-                    String name = getScriptName(file.getName());
-
-                    this.scripts.add(new Script(this, name, game, scripts));
-                    logger.info(name + " loaded.");
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        for(Script script : scripts)
-            script.onGameConstructionEvent(event);
+        scriptManager.onGameConstructionEvent(event);
     }
 
     @Listener
     public void onGamePreInitializationEvent(GamePreInitializationEvent event){
-        for(Script script : scripts)
-            script.onGamePreInitializationEvent(event);
+        scriptManager.onGamePreInitializationEvent(event);
     }
 
     @Listener
     public void onGameInitializationEvent(GameInitializationEvent event){
-        for(Script script : scripts)
-            script.onGameInitializationEvent(event);
+        scriptManager.onGameInitializationEvent(event);
     }
 
     @Listener
     public void onGamePostInitializationEvent(GamePostInitializationEvent event){
-        for(Script script : scripts)
-            script.onGamePostInitializationEvent(event);
+        scriptManager.onGamePostInitializationEvent(event);
     }
 
     @Listener
     public void onGameLoadCompleteEvent(GameLoadCompleteEvent event){
-        for(Script script : scripts)
-            script.onGameLoadCompleteEvent(event);
+        scriptManager.onGameLoadCompleteEvent(event);
     }
 
     @Listener
     public void onGameAboutToStartServerEvent(GameAboutToStartServerEvent event){
-        for(Script script : scripts)
-            script.onGameAboutToStartServerEvent(event);
+        scriptManager.onGameAboutToStartServerEvent(event);
     }
 
     @Listener
     public void onGameStartingServerEvent(GameStartingServerEvent event){
-        for(Script script : scripts)
-            script.onGameStartingServerEvent(event);
+        scriptManager.onGameStartingServerEvent(event);
     }
 
     @Listener
     public void onGameStartedServerEvent(GameStartedServerEvent event){
-        for(Script script : scripts)
-            script.onGameStartedServerEvent(event);
+        scriptManager.onGameStartedServerEvent(event);
     }
 
     @Listener
     public void onGameStoppingServerEvent(GameStoppingServerEvent event){
-        for(Script script : scripts)
-            script.onGameStoppingServerEvent(event);
+        scriptManager.onGameStoppingServerEvent(event);
     }
 
     @Listener
     public void onGameStoppedServerEvent(GameStoppedServerEvent event){
-        for(Script script : scripts)
-            script.onGameStoppedServerEvent(event);
+        scriptManager.onGameStoppedServerEvent(event);
+    }
+
+    private void loadScripts(){
+        for(File file : scriptFolder.listFiles()) {
+            if(file.isDirectory()) {
+                String name = getScriptName(file.getName());
+                ArrayList<File> scripts = new ArrayList<>();
+
+                for(File script : file.listFiles())
+                    if (script.getName().endsWith(".js"))
+                        scripts.add(script);
+
+                try {
+                    scriptManager.createScript(this, name, scripts);
+                    logger.info(name + " loaded.");
+                }catch (Exception e){
+                    logger.error("Couldn't load "+name+".");
+                }
+            }
+        }
+    }
+
+    private void initScriptFolder(){
+        scriptFolder = new File("."+File.separator+"mods"+File.separator+"javascript");
+        scriptFolder.mkdirs();
     }
 
     private String getScriptName(String name){
