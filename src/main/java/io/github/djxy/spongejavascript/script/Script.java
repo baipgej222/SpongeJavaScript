@@ -12,10 +12,6 @@ package io.github.djxy.spongejavascript.script;
 
 import io.github.djxy.spongejavascript.javascript.JavascriptObject;
 import io.github.djxy.spongejavascript.script.exceptions.CodeException;
-import io.github.djxy.spongejavascript.script.util.*;
-import org.slf4j.LoggerFactory;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.event.game.state.*;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -80,46 +76,6 @@ public final class Script {
         }catch (Exception e){}
 
         return null;
-    }
-
-    public void onGameConstructionEvent(GameConstructionEvent event){
-        invoke("onGameConstructionEvent", event);
-    }
-
-    public void onGamePreInitializationEvent(GamePreInitializationEvent event){
-        invoke("onGamePreInitializationEvent", event);
-    }
-
-    public void onGameInitializationEvent(GameInitializationEvent event){
-        invoke("onGameInitializationEvent", event);
-    }
-
-    public void onGamePostInitializationEvent(GamePostInitializationEvent event){
-        invoke("onGamePostInitializationEvent", event);
-    }
-
-    public void onGameLoadCompleteEvent(GameLoadCompleteEvent event){
-        invoke("onGameLoadCompleteEvent", event);
-    }
-
-    public void onGameAboutToStartServerEvent(GameAboutToStartServerEvent event){
-        invoke("onGameAboutToStartServerEvent", event);
-    }
-
-    public void onGameStartingServerEvent(GameStartingServerEvent event){
-        invoke("onGameStartingServerEvent", event);
-    }
-
-    public void onGameStartedServerEvent(GameStartedServerEvent event){
-        invoke("onGameStartedServerEvent", event);
-    }
-
-    public void onGameStoppingServerEvent(GameStoppingServerEvent event){
-        invoke("onGameStoppingServerEvent", event);
-    }
-
-    public void onGameStoppedServerEvent(GameStoppedServerEvent event){
-        invoke("onGameStoppedServerEvent", event);
     }
 
 }

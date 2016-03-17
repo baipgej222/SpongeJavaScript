@@ -10,8 +10,6 @@
 
 package io.github.djxy.spongejavascript.script;
 
-import org.spongepowered.api.event.game.state.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,56 +71,6 @@ public class ScriptManager {
         scripts.add(script);
 
         return script;
-    }
-
-    public void onGameConstructionEvent(GameConstructionEvent event){
-        for(Script script : scripts)
-            script.onGameConstructionEvent(event);
-    }
-
-    public void onGamePreInitializationEvent(GamePreInitializationEvent event){
-        for(Script script : scripts)
-            script.onGamePreInitializationEvent(event);
-    }
-
-    public void onGameInitializationEvent(GameInitializationEvent event){
-        for(Script script : scripts)
-            script.onGameInitializationEvent(event);
-    }
-
-    public void onGamePostInitializationEvent(GamePostInitializationEvent event){
-        for(Script script : scripts)
-            script.onGamePostInitializationEvent(event);
-    }
-
-    public void onGameLoadCompleteEvent(GameLoadCompleteEvent event){
-        for(Script script : scripts)
-            script.onGameLoadCompleteEvent(event);
-    }
-
-    public void onGameAboutToStartServerEvent(GameAboutToStartServerEvent event){
-        for(Script script : scripts)
-            script.onGameAboutToStartServerEvent(event);
-    }
-
-    public void onGameStartingServerEvent(GameStartingServerEvent event){
-        for(Script script : scripts)
-            script.onGameStartingServerEvent(event);
-    }
-
-    public void onGameStartedServerEvent(GameStartedServerEvent event){
-        for(Script script : scripts)
-            script.onGameStartedServerEvent(event);
-    }
-
-    public void onGameStoppingServerEvent(GameStoppingServerEvent event){
-        for(Script script : scripts)
-            script.onGameStoppingServerEvent(event);
-    }
-
-    public void onGameStoppedServerEvent(GameStoppedServerEvent event){
-        for(Script script : scripts)
-            script.onGameStoppedServerEvent(event);
     }
 
 }
