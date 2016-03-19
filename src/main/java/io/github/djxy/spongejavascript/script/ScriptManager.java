@@ -58,15 +58,28 @@ public class ScriptManager {
         this.filter = classFilter;
     }
 
+    /**
+     * Invoke a function in each script.
+     * @param function
+     * @param args
+     */
     public void invoke(String function, Object... args){
         for(Script script : scripts)
             script.invoke(function, args);
     }
 
+    /**
+     * Return all the scripts created.
+     * @return
+     */
     public List<Script> getScripts(){
         return new ArrayList<>(scripts);
     }
 
+    /**
+     * Adds JavaScript code in each script. For more information about how it works, go read https://docs.oracle.com/javase/7/docs/api/javax/script/ScriptEngine.html#eval(java.lang.String)
+     * @param code
+     */
     public void addCode(String code){
         javascriptCodes.add(code);
 
@@ -74,6 +87,11 @@ public class ScriptManager {
             script.addCode(code);
     }
 
+    /**
+     * Adds a new variable to each script. The variable will be called the name you give it and will contain the object given in parameter.
+     * @param name The name of the variable.
+     * @param o The object assigned to the variable.
+     */
     public void addVariable(String name, Object o){
         variables.put(name, o);
 
@@ -81,10 +99,23 @@ public class ScriptManager {
             script.addVariable(name, o);
     }
 
+    /**
+     * Create a new script with a random name.
+     * @param plugin Your plugin object.
+     * @param files The files containing your JavaScript.
+     * @return
+     */
     public Script createScript(Object plugin, ArrayList<File> files){
         return createScript(plugin, UUID.randomUUID().toString(), files);
     }
 
+    /**
+     * Create a new script with a custom name.
+     * @param plugin Your plugin object.
+     * @param files The files containing your JavaScript.
+     * @param name Name of the script.
+     * @return
+     */
     public Script createScript(Object plugin, String name, ArrayList<File> files){
         Script script = filter == null?new Script(plugin, name, files, factory.getScriptEngine()): new Script(plugin, name, files, factory.getScriptEngine(filter));
 
