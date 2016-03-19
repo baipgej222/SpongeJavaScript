@@ -50,25 +50,27 @@ public class JavascriptObject implements JSObject {
     }
 
     public static JavascriptObject convertObjectToJSObject(Object object){
-        if(!(object instanceof JavascriptObject)) {
-            ConcurrentHashMap<Object, JavascriptObject> map = objects.get(object.getClass().getName());
-            JavascriptObject javascriptObject;
+        if(object != null) {
+            if (!(object instanceof JavascriptObject)) {
+                ConcurrentHashMap<Object, JavascriptObject> map = objects.get(object.getClass().getName());
+                JavascriptObject javascriptObject;
 
-            if (map != null) {
-                if ((javascriptObject = map.get(object)) != null) {
-                    return javascriptObject;
+                if (map != null) {
+                    if ((javascriptObject = map.get(object)) != null) {
+                        return javascriptObject;
+                    } else {
+                        JavascriptObject js = new JavascriptObject(object);
+                        map.put(object, js);
+                        return js;
+                    }
                 }
-                else{
-                    JavascriptObject js = new JavascriptObject(object);
-                    map.put(object, js);
-                    return js;
-                }
-            }
 
-            return new JavascriptObject(object);
+                return new JavascriptObject(object);
+            } else
+                return (JavascriptObject) object;
         }
         else
-            return (JavascriptObject) object;
+            return null;
     }
 
     public static Object convertJSObjectToObject(Object object){
