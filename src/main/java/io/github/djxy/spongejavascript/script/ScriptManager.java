@@ -10,6 +10,9 @@
 
 package io.github.djxy.spongejavascript.script;
 
+import jdk.nashorn.api.scripting.ClassFilter;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +26,36 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ScriptManager {
 
+    public static final String SCHEDULER_FUNCTIONS = "function setInterval(callback, interval){return scheduler.setInterval(callback, interval);}" +
+            "function setTimeout(callback, delay){return scheduler.setTimeout(callback, delay);}" +
+            "function clearInterval(intervalId){Scheduler.getInstance().clearInterval(intervalId);}" +
+            "function clearTimeout(timeoutId){Scheduler.getInstance().clearTimeout(timeoutId);}";
+    public static final String JAVASCRIPT = "var Javascript = Java.type('io.github.djxy.spongejavascript.javascript.JavascriptObject');" +
+            "function convertToJSObject(object){return Javascript.convertObjectToJSObject(object);}" +
+            "function convertToObject(object){return Javascript.convertJSObjectToObject(object);}";
+    public static final String JSON = "var JSON = Java.type('io.github.djxy.spongejavascript.script.util.JSONParser');";
+    public static final String TEXT = "var Text = Java.type('org.spongepowered.api.text.Text');" +
+            "var TextSerializers = Java.type('org.spongepowered.api.text.serializer.TextSerializers');" +
+            "var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');" +
+            "function stringToText(text){return TextSerializers.FORMATTING_CODE.deserialize(text);}";
+
+
     private final ConcurrentHashMap<String,Object> variables;
     private final CopyOnWriteArrayList<Script> scripts;
     private final CopyOnWriteArrayList<String> javascriptCodes;
+    private final NashornScriptEngineFactory factory;
+    private final ClassFilter filter;
 
     public ScriptManager() {
+        this(null);
+    }
+
+    public ScriptManager(ClassFilter classFilter) {
         this.scripts = new CopyOnWriteArrayList<>();
         this.variables = new ConcurrentHashMap<>();
         this.javascriptCodes = new CopyOnWriteArrayList<>();
+        this.factory = new NashornScriptEngineFactory();
+        this.filter = classFilter;
     }
 
     public void invoke(String function, Object... args){
@@ -61,7 +86,7 @@ public class ScriptManager {
     }
 
     public Script createScript(Object plugin, String name, ArrayList<File> files){
-        Script script = new Script(plugin, name, files);
+        Script script = filter == null?new Script(plugin, name, files, factory.getScriptEngine()): new Script(plugin, name, files, factory.getScriptEngine(filter));
 
         for(Map.Entry pairs : variables.entrySet())
             script.addVariable((String) pairs.getKey(), pairs.getValue());
