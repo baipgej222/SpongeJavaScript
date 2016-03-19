@@ -72,8 +72,9 @@ public final class Script {
                 args[i] = JavascriptObject.convertObjectToJSObject(args[i]);
 
             return invocable.invokeFunction(function, args);
-        }catch (Exception e){
+        }catch (ScriptException e){
             e.printStackTrace();
+        } catch (NoSuchMethodException e) {
         }
 
         return null;
