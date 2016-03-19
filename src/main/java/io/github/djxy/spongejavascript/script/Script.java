@@ -15,7 +15,6 @@ import io.github.djxy.spongejavascript.script.exceptions.CodeException;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileReader;
@@ -31,11 +30,11 @@ public final class Script {
     private final ArrayList<File> files;
     private final ScriptEngine engine;
 
-    public Script(Object plugin, String name, ArrayList<File> files) {
+    public Script(Object plugin, String name, ArrayList<File> files, ScriptEngine scriptEngine) {
         this.plugin = plugin;
         this.name = name;
         this.files = files;
-        this.engine = new ScriptEngineManager().getEngineByName("nashorn");
+        this.engine = scriptEngine;
 
         try {
             for(File script : files)
@@ -73,7 +72,9 @@ public final class Script {
                 args[i] = JavascriptObject.convertObjectToJSObject(args[i]);
 
             return invocable.invokeFunction(function, args);
-        }catch (Exception e){}
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return null;
     }
