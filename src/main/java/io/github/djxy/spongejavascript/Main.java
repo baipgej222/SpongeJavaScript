@@ -10,8 +10,8 @@
 
 package io.github.djxy.spongejavascript;
 
-import io.github.djxy.spongejavascript.script.ScriptManager;
 import io.github.djxy.spongejavascript.script.ScriptService;
+import io.github.djxy.spongejavascript.script.SpongeScriptManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -30,16 +30,17 @@ public class Main {
 
     private Logger logger = LoggerFactory.getLogger("SpongeJavaScript");
 
-    private ScriptManager scriptManager;
+    private SpongeScriptManager scriptManager;
     private File scriptFolder;
 
     @Listener
     public void onGameConstructionEvent(GameConstructionEvent event){
-        scriptManager = new ScriptManager();
-        Sponge.getServiceManager().setProvider(this, ScriptService.class, new ScriptService(scriptManager));
+        scriptManager = new SpongeScriptManager();
 
         initScriptFolder();
         loadScripts();
+
+        Sponge.getServiceManager().setProvider(this, ScriptService.class, new ScriptService(scriptManager));
 
         scriptManager.onGameConstructionEvent(event);
     }
