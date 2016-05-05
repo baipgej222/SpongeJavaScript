@@ -13,6 +13,7 @@ package io.github.djxy.spongejavascript.script;
 import jdk.nashorn.api.scripting.ClassFilter;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
+import javax.script.ScriptEngine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +118,7 @@ public class ScriptManager {
      * @return
      */
     public Script createScript(Object plugin, String name, ArrayList<File> files){
-        Script script = filter == null?new Script(plugin, name, files, factory.getScriptEngine()): new Script(plugin, name, files, factory.getScriptEngine(filter));
+        Script script = new Script(plugin, name, files, createScriptEngine(), this);
 
         for(Map.Entry pairs : variables.entrySet())
             script.addVariable((String) pairs.getKey(), pairs.getValue());
@@ -127,6 +128,20 @@ public class ScriptManager {
         scripts.add(script);
 
         return script;
+    }
+
+    protected ScriptEngine createScriptEngine(){
+        return filter == null?factory.getScriptEngine():factory.getScriptEngine(filter);
+    }
+
+    protected void reloadScript(Script script){
+        script.setEngine(createScriptEngine());
+        script.loadFiles();
+
+        for(Map.Entry pairs : variables.entrySet())
+            script.addVariable((String) pairs.getKey(), pairs.getValue());
+
+        javascriptCodes.forEach(script::addCode);
     }
 
 }

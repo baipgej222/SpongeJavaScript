@@ -15,6 +15,7 @@ import io.github.djxy.spongejavascript.javascript.JavascriptObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -25,6 +26,8 @@ import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Samuel on 2016-02-18.
@@ -32,9 +35,11 @@ import java.util.HashMap;
 public class CommandManager {
 
     private final Object plugin;
+    private final List<CommandMapping> commandMappings;
 
     public CommandManager(Object plugin) {
         this.plugin = plugin;
+        this.commandMappings = new CopyOnWriteArrayList<>();
     }
 
     public void register(ScriptObjectMirror scriptObjectMirror){
@@ -60,8 +65,13 @@ public class CommandManager {
             if (arguments != null && arguments.isArray())
                 setGenericArguments(command, arguments, commandExecutor);
 
-            Sponge.getGame().getCommandManager().register(plugin, command.build(), getCommands(commands));
+            commandMappings.add(Sponge.getGame().getCommandManager().register(plugin, command.build(), getCommands(commands)).get());
         }
+    }
+
+    public void clearAll(){
+        for(CommandMapping commandMapping : commandMappings)
+            Sponge.getGame().getCommandManager().removeMapping(commandMapping);
     }
 
     private void setGenericArguments(CommandSpec.Builder command, ScriptObjectMirror genericArguments, CommandExecutor commandExecutor){

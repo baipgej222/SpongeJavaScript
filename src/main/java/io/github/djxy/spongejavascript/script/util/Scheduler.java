@@ -33,6 +33,11 @@ public class Scheduler {
         this.tasks = new ConcurrentHashMap<>();
     }
 
+    public void clearAll(){
+        for(Task task : tasks.values())
+            task.cancel();
+    }
+
     public void clearInterval(String id){
         UUID uuid = UUID.fromString(id);
         Task task = tasks.get(uuid);

@@ -26,13 +26,15 @@ import java.util.ArrayList;
 public final class Script {
 
     private final String name;
+    private final ScriptManager scriptManager;
     private final Object plugin;
     private final ArrayList<File> files;
-    private final ScriptEngine engine;
+    private ScriptEngine engine;
 
-    public Script(Object plugin, String name, ArrayList<File> files, ScriptEngine scriptEngine) {
+    public Script(Object plugin, String name, ArrayList<File> files, ScriptEngine scriptEngine, ScriptManager scriptManager) {
         this.plugin = plugin;
         this.name = name;
+        this.scriptManager = scriptManager;
         this.files = files;
         this.engine = scriptEngine;
 
@@ -78,6 +80,23 @@ public final class Script {
         }
 
         return null;
+    }
+
+    public void reload(){
+        scriptManager.reloadScript(this);
+    }
+
+    protected void setEngine(ScriptEngine scriptEngine){
+        this.engine = scriptEngine;
+    }
+
+    protected void loadFiles(){
+        try {
+            for(File script : files)
+                engine.eval(new FileReader(script));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
