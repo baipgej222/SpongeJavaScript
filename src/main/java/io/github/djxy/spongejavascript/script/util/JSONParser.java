@@ -30,9 +30,16 @@ public class JSONParser {
 
     public static String stringify(ScriptObjectMirror object){
         if(!object.isArray())
-            return new JSONObject(object).toString(4);
+            return new JSONObject(object).toString();
         else
-            return new JSONArray(object.values()).toString(4);
+            return new JSONArray(object.values()).toString();
+    }
+
+    public static String stringify(ScriptObjectMirror object, int indent){
+        if(!object.isArray())
+            return new JSONObject(object).toString(indent);
+        else
+            return new JSONArray(object.values()).toString(indent);
     }
 
 }
