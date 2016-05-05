@@ -34,6 +34,10 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -42,6 +46,11 @@
             <artifactId>spongeapi</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.djxy</groupId>
+            <artifactId>DjxyCore</artifactId>
+            <version>-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

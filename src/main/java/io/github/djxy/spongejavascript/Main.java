@@ -10,31 +10,58 @@
 
 package io.github.djxy.spongejavascript;
 
+import com.google.inject.Inject;
+import io.github.djxy.core.CorePlugin;
+import io.github.djxy.core.CoreUtil;
+import io.github.djxy.core.commands.Command;
+import io.github.djxy.core.commands.nodes.ChoiceNode;
+import io.github.djxy.core.commands.nodes.Node;
+import io.github.djxy.core.files.FileManager;
+import io.github.djxy.core.translation.Translator;
+import io.github.djxy.spongejavascript.commands.arguments.ScriptNode;
+import io.github.djxy.spongejavascript.commands.executors.ReloadScriptExecutor;
 import io.github.djxy.spongejavascript.script.ScriptService;
 import io.github.djxy.spongejavascript.script.SpongeScriptManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Samuel on 2016-02-07.
  */
-@Plugin(id = "spongejavascript", name = "Sponge JavaScript", version = "1.0")
-public class Main {
+@Plugin(id = "spongejavascript", name = "SpongeJavaScript", version = "2.0", dependencies = @Dependency(id = "djxycore"))
+public class Main implements CorePlugin {
 
+    private static Main instance;
+
+    public static Main getInstance() {
+        return instance;
+    }
+
+    public static Translator getTranslatorInstance(){
+        return instance.getTranslator();
+    }
+
+    @Inject @DefaultConfig(sharedRoot = false) private Path path;
+    private Translator translator = new Translator(TextSerializers.FORMATTING_CODE.deserialize("&f[&6Sponge&l&4JS&r&f] "));
     private Logger logger = LoggerFactory.getLogger("SpongeJavaScript");
-
     private SpongeScriptManager scriptManager;
     private File scriptFolder;
 
     @Listener
     public void onGameConstructionEvent(GameConstructionEvent event){
+        instance = this;
         scriptManager = new SpongeScriptManager();
 
         initScriptFolder();
@@ -42,7 +69,13 @@ public class Main {
 
         Sponge.getServiceManager().setProvider(this, ScriptService.class, new ScriptService(scriptManager));
 
+        Sponge.getCommandManager().register(this, new Command(createCommandJavaScript()), "js");
+
         scriptManager.onGameConstructionEvent(event);
+    }
+
+    public Node createCommandJavaScript(){
+        return new ChoiceNode("").addNode(new ScriptNode("reload", "script", scriptManager).setExecutor(new ReloadScriptExecutor()));
     }
 
     @Listener
@@ -122,4 +155,33 @@ public class Main {
             return name.substring(0,1).toUpperCase()+name.substring(1);
     }
 
+    @Override
+    public String getGithubApiURL() {
+        return "https://api.github.com/repos/djxy/SpongeJavaScript";
+    }
+
+    @Override
+    public Path getTranslationPath() {
+        return path.getParent().resolve("translations");
+    }
+
+    @Override
+    public Translator getTranslator() {
+        return translator;
+    }
+
+    @Override
+    public void loadTranslations() {
+        CoreUtil.loadTranslationFiles(getTranslationPath(), translator);
+    }
+
+    @Override
+    public List<FileManager> getFileManagers(Class<? extends FileManager>... classes) {
+        return null;
+    }
+
+    @Override
+    public FileManager getFileManager(String s, Class<? extends FileManager>... classes) {
+        return null;
+    }
 }
