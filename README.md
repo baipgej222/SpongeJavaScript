@@ -16,3 +16,7 @@ var player;
 player.displayName = "Djxy";
 ```
 The power of this plugin is that you can interact with any Java objects that are wrapped by the plugin. That mean you can interact with the **Sponge API** in JavaScript.
+
+
+# Dependency
+- [DjxyCore](https://github.com/djxy/DjxyCore)
