@@ -186,8 +186,10 @@ public class JavascriptObject implements JSObject {
     @Override
     public boolean isInstanceOf(Object o) {
         o = o instanceof JavascriptObject?((JavascriptObject) o).realObject:o;
+        o = o instanceof Class?o:o.getClass();
+        Class realObjectClass = realObject instanceof Class? (Class) realObject :realObject.getClass();
 
-        return realObject.getClass().equals(o.getClass());
+        return ((Class) o).isAssignableFrom(realObjectClass);
     }
 
     @Override
