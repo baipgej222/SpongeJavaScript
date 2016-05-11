@@ -14,6 +14,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SpongeScriptManager extends ScriptManager {
 
+    public static final String SCHEDULER_FUNCTIONS = "function setInterval(callback, interval){return scheduler.setInterval(callback, interval);}" +
+            "function setTimeout(callback, delay){return scheduler.setTimeout(callback, delay);}" +
+            "function clearInterval(intervalId){Scheduler.getInstance().clearInterval(intervalId);}" +
+            "function clearTimeout(timeoutId){Scheduler.getInstance().clearTimeout(timeoutId);}";
+    public static final String JAVASCRIPT = "var Javascript = Java.type('io.github.djxy.spongejavascript.javascript.JavascriptObject');" +
+            "function convertToJSObject(object){return Javascript.convertObjectToJSObject(object);}" +
+            "function convertToObject(object){return Javascript.convertJSObjectToObject(object);}";
+    public static final String JSON = "var JSON = Java.type('io.github.djxy.spongejavascript.script.util.JSONParser');";
+    public static final String PLAYER = "var Player = Java.type('org.spongepowered.api.entity.living.player.Player');";
+    public static final String TEXT = "var Text = Java.type('org.spongepowered.api.text.Text');" +
+            "var TextSerializers = Java.type('org.spongepowered.api.text.serializer.TextSerializers');" +
+            "var TextColors = Java.type('org.spongepowered.api.text.format.TextColors');" +
+            "function stringToText(text){return TextSerializers.FORMATTING_CODE.deserialize(text);}";
+
     private final ConcurrentHashMap<Script, ScriptVariables> scriptVariables;
     private EconomyService economyService;
 
@@ -26,6 +40,7 @@ public class SpongeScriptManager extends ScriptManager {
         addCode(JAVASCRIPT);
         addCode(JSON);
         addCode(TEXT);
+        addCode(PLAYER);
     }
 
     @Override
