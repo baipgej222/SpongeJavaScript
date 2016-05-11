@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Samuel on 2016-02-07.
  */
-@Plugin(id = "spongejavascript", name = "SpongeJavaScript", version = "v2.0.1", dependencies = @Dependency(id = "djxycore"))
+@Plugin(id = "spongejavascript", name = "SpongeJavaScript", version = "v2.0.2", dependencies = @Dependency(id = "djxycore"))
 public class Main implements CorePlugin {
 
     private static Main instance;
